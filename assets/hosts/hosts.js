@@ -1,3 +1,3 @@
 export const HOST = {
-    backend_api: 'http://192.168.100.7:8000',
+    backend_api: 'http://192.168.0.154:8000',
 };

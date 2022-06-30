@@ -1,57 +1,32 @@
 import {Text, StyleSheet, View, Pressable } from 'react-native'
-import { AntDesign, FontAwesome, Entypo } from '@expo/vector-icons'; 
+import { FontAwesome, Entypo } from '@expo/vector-icons'; 
 
 import React from 'react'
 
 
-const ForgotPasswordErrorMessage = (props) => {
+const PrefferenceErrorMessage = (props) => {
 
     return (
-        <View style={props.changePassword ? styles.change_root : styles.root}>
-           
-            {props.isSuccess ? 
-                <AntDesign name="checkcircle" size={20} style={styles.greenCheck} />
-                : 
-                <FontAwesome name="exclamation-circle" size={20} style={styles.exclamation} 
-            />}
-
+        <View style={styles.root}>
+            <FontAwesome name="exclamation-circle" size={20} style={styles.exclamation}/>
             <Text style={styles.text}>{props.text}</Text>
-
             <Pressable style={styles.cross} onPress={props.handlePress}>
                 <Entypo name="cross" size={16} color="#dd5790" />
             </Pressable>
-
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    change_root: {
-        height: '7%',
-        width: '80%',
-        marginLeft: '10%',
-        marginTop: '5%',
-        borderWidth: 2,
-        borderRadius: 5,
-        borderColor: '#dd5790',
-        flexDirection: 'row',
-    },
-
     root: {
         height: '5%',
-        width: '90%',
-        marginLeft: '5%',
-        marginTop: '5%',
+        width: '80%',
+        marginTop: '2%',
+        marginLeft: '10%',
         borderWidth: 2,
         borderRadius: 5,
         borderColor: '#dd5790',
         flexDirection: 'row',
-    },
-
-    greenCheck: {
-        marginLeft: '2%',
-        marginTop: '1.5%',
-        color: 'green'
     },
 
     exclamation:{
@@ -76,4 +51,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ForgotPasswordErrorMessage
+export default PrefferenceErrorMessage

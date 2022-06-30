@@ -6,10 +6,10 @@ const CustomInput = (props) => {
     <View style={styles.container}>
       <TextInput
         placeholder={props.placeholder}
-        placeholderTextColor='white'
+        placeholderTextColor={props.changePassword ? '#dd5790' :'white'}
         value={props.value}
         onChangeText={props.setValue}
-        style={props.withButton ? styles.input_with_button : styles.input}
+        style={props.withButton ? styles.input_with_button : (props.changePassword ? styles.input_change_password : styles.input)}
         secureTextEntry={props.isPassword}
       /> 
 
@@ -39,6 +39,13 @@ const styles = StyleSheet.create({
     input: {
       paddingLeft: 10,
       color: 'white',
+      width: '100%',
+      height: '100%',
+    },
+
+    input_change_password: {
+      paddingLeft: 10,
+      color: '#dd5790',
       width: '100%',
       height: '100%',
     },

@@ -7,7 +7,8 @@ const endpoint = {
     getAuthenticatedUser: '/user',
     generateVerificationCode:'/generate-verification-code',
     checkVerificationCode:'/check-verification-code',
-    logout: 'log-out'
+    logout: '/log-out',
+    changePassword:'/change-password'
 }
 
 function logIn(usernameAndPassword, callback) {
@@ -62,9 +63,35 @@ function checkVerificationCode(emailAndVerificationCode, callback) {
     RestApiClient.performRequest(request, callback);
 }
 
+function changePassword(newPassword, callback) {
+    let request = new Request(HOST.backend_api + endpoint.changePassword , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPassword)
+    });
+
+    RestApiClient.performRequest(request, callback);
+}
+
+function logOut(callback) {
+    let request = new Request(HOST.backend_api + endpoint.logout , {
+        method: 'POST',
+        headers : {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+    });
+    RestApiClient.performRequest(request, callback);
+}
+
 export{
     logIn,
     register,
     generateVerificationCode,
-    checkVerificationCode
+    checkVerificationCode,
+    changePassword,
+    logOut
 }

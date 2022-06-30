@@ -26,14 +26,14 @@ const styles = StyleSheet.create({
     gradient_pressed: {
         marginLeft: '6.5%',
         width: '40%',
-        height: '100%',
+        height: '80%',
         borderRadius: 15,
     },
 
     gradient_not_pressed: {
         marginLeft: '6.5%',
         width: '40%',
-        height: '100%',
+        height: '80%',
         borderWidth: 4,
         borderColor: '#dd5785',
         borderRadius: 15,

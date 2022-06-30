@@ -8,6 +8,9 @@ import ForgotPasswordView from '../screens/ForgotPasswordView';
 import ResetPasswordView from '../screens/ResetPasswordView';
 import PrefferencesView from '../screens/PrefferencesView'
 import WelcomeView from '../screens/WelcomeView';
+import RecommendedGroupsView from '../screens/RecommendedGroupsView';
+import CommentPage from '../screens/AppPages/CommentPage';
+import ChangePasswordView from '../screens/ChangePasswordView'
 
 const Navigation = () => {
     const Stack = createStackNavigator();
@@ -21,7 +24,10 @@ const Navigation = () => {
                 <Stack.Screen name="Forgotten Password" component={ForgotPasswordView}></Stack.Screen>
                 <Stack.Screen name="Reset Password" component={ResetPasswordView}></Stack.Screen>
                 <Stack.Screen name="Welcome Page" component={WelcomeView} options={{gestureEnabled: false}}></Stack.Screen>
-                <Stack.Screen name="Prefferences" component={PrefferencesView} options={{gestureEnabled: false}}></Stack.Screen>
+                <Stack.Screen name="Prefferences" component={PrefferencesView}></Stack.Screen>
+                <Stack.Screen name="Recommended Groups" component={RecommendedGroupsView}></Stack.Screen>
+                <Stack.Screen name="Comment" component={CommentPage}></Stack.Screen>
+                <Stack.Screen name="Change Password" component={ChangePasswordView}></Stack.Screen>
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -29,12 +29,11 @@ const LoginView = ({navigation}) => {
   }
 
   const onSignUpPress = async () => {
-    console.log(await AsyncStorage.getItem('user'))
-    navigation.navigate("Register")
+    navigation.push("Register")
   }
 
   const onForgottenPasswordPress = () => {
-    navigation.navigate("Forgotten Password")
+    navigation.push("Forgotten Password")
   }
 
 
@@ -43,8 +42,6 @@ const LoginView = ({navigation}) => {
           password: password,
           username: username
       }
-
-      console.log(usernameAndPassowrd)
 
       return API_MESSAGES.logIn(usernameAndPassowrd, async (result, status, error) => {
           if (result === null || (status !== 200 && status !== 201)) {
@@ -60,9 +57,14 @@ const LoginView = ({navigation}) => {
 
                 // stringify & save the logged-in user in the async storage for a later use
                 const stringifiedUser = JSON.stringify(result.user)
+                console.log(stringifiedUser)
                 await AsyncStorage.setItem('user', stringifiedUser)
                 // navigate the user to the welcome page, if this is his/her first log-in
-                navigation.navigate("Welcome Page")
+                if (result.user.is_first_login) {
+                  navigation.push("Welcome Page")
+                } else {
+                  navigation.push("Home")
+                }
               }
               
               // this means the user introduced wrong authorization credentials

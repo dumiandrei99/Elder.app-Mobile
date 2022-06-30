@@ -9,10 +9,14 @@ import { ScrollView } from 'react-native-gesture-handler';
 import CustomButton from '../components/CustomButton';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as API from '../api/group_endpoints';
+import { useNavigation } from '@react-navigation/native';
+import PrefferenceErrorMessage from '../components/error_messages/PrefferenceErrorMessage';
+import { clickProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
-const PrefferencesView = () => {
-
+const PrefferencesView = ({route}) => {
+    const { editPrefferences } = route.params
     const {height} = useWindowDimensions();
+    const navigation = useNavigation();
 
     const [prefferences, setPrefferences] = useState({
         walking: false,
@@ -24,7 +28,7 @@ const PrefferencesView = () => {
         hunting: false,
         writing: false,
         music: false,
-        painting:false
+        painting: false
     })
     const [pressedWalking, setPressedWalking] = useState(false)
     const [pressedSports, setPressedSports] = useState(false)
@@ -36,6 +40,14 @@ const PrefferencesView = () => {
     const [pressedWriting, setPressedWriting] = useState(false)
     const [pressedMusic, setPressedMusic] = useState(false)
     const [pressedPainting, setPressedPainting] = useState(false)
+
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('')
+
+    const hideErrorMessage = () => {
+        setShowErrorMessage(false);
+        setErrorMessage('');
+    }
 
     useEffect(() => { 
         
@@ -147,18 +159,43 @@ const PrefferencesView = () => {
         const user = await AsyncStorage.getItem('user')
         const user_JSON = JSON.parse(user)
 
-        let prefferences_JSON = {
+        let username_JSON = {
+            username: user_JSON.username,
+        }  
+        
+        let username_and_prefferences_JSON ={ 
             username: user_JSON.username,
             prefferences: prefferences
-        }  
+        }
 
-        return API.recommendGroups(prefferences_JSON, (result, status, error) => {
+        API.savePrefferences(username_and_prefferences_JSON, (result, status, error) => {
             if (result === null || (status !== 200 && status !== 201)) {
               console.log(status)
               console.log(error)
               console.warn("NOT ABLE TO CONNECT TO SERVER!")
             } else {
-                console.log(result)
+                if (result.message) { 
+                    setErrorMessage(result.message)
+                    setShowErrorMessage(true)
+                } else { 
+                    setErrorMessage('')
+                    setShowErrorMessage(false)
+                    API.recommendGroups(username_JSON, (result, status, error) => {
+                        if (result === null || (status !== 200 && status !== 201)) {
+                          console.log(status)
+                          console.log(error)
+                          console.warn("NOT ABLE TO CONNECT TO SERVER!")
+                        } else {
+                            if (editPrefferences) {
+                                navigation.push("Home")
+                            } else {
+                                navigation.push("Recommended Groups", {
+                                    groups: result.reverse(),
+                                }); 
+                            }
+                        }
+                    })
+                }
             }
         })
     }
@@ -181,9 +218,15 @@ const PrefferencesView = () => {
                     style={[styles.logo, {height: height * 0.1}]} 
                     resizeMode="contain"
                 />
-                <Text style={styles.label}>Let's choose your prefferences !</Text> 
             </View>
-        
+            {showErrorMessage && 
+                <PrefferenceErrorMessage style={styles.test} text={errorMessage} handlePress={hideErrorMessage}></PrefferenceErrorMessage>
+            }
+            {editPrefferences ? 
+                <Text style={styles.label_edit}>Choose a new set of prefferences !</Text> 
+                :
+                <Text style={styles.label}>Let's choose your prefferences !</Text> 
+            }
             <ScrollView>
                 <View style={{paddingBottom: '270%'}}>
                     <View style={styles.prefference_row}>
@@ -223,7 +266,7 @@ const PrefferencesView = () => {
 const styles = StyleSheet.create({
 
     label: {
-      marginTop: '10%',
+      marginTop: '5%',
       width: '100%',
       marginLeft: '6%',
       color: '#dd5790',
@@ -231,6 +274,17 @@ const styles = StyleSheet.create({
       fontSize: 20,
       textAlign: 'left'
     },
+
+    label_edit: {
+        marginTop: '5%',
+        width: '100%',
+        marginLeft: '2%',
+        color: '#dd5790',
+        fontFamily: 'JuliusSansOne_400Regular',
+        fontSize: 20,
+        textAlign: 'left'
+      },
+  
 
     scroll_view_style: {
         paddingBottom: 1000,
@@ -262,7 +316,7 @@ const styles = StyleSheet.create({
         height: '15%',
         marginTop: '5%',
         marginLeft: '15%'
-    }
+    },
   })
 
 export default PrefferencesView

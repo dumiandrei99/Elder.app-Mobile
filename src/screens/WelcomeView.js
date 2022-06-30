@@ -34,7 +34,9 @@ const WelcomeView = ({navigation}) => {
   }
 
   const onContinueThirdCard = () => { 
-    navigation.navigate("Prefferences")
+    navigation.push("Prefferences", {
+      editPrefferences: false
+    })
   }
 
   return (
